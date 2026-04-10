@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Admin — Tk-120</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;
+  --accent:#e94560;--blue:#1a73e8;--green:#00c853;
+  --orange:#ff6d00;--purple:#7c4dff;
+  --text:#e0e0e0;--muted:#888;--border:#2a2a4a;
+  --hh:56px;--nh:50px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;overflow-x:hidden}
+header{position:fixed;top:0;left:0;right:0;height:var(--hh);background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:100}
+.logo{font-size:18px;font-weight:700;color:var(--accent)}
+.logo span{color:var(--text);font-weight:400;font-size:13px;margin-left:8px}
+.abadge{background:var(--accent);color:#fff;font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nh);background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--muted);font-size:9px;border:none;background:none;transition:.2s;padding:4px 2px}
+.ni.active{color:var(--accent)}
+.ni-icon{font-size:19px}
+main{margin-top:var(--hh);margin-bottom:var(--nh);padding:14px}
+.page{display:none}.page.active{display:block}
+.stitle{font-size:20px;font-weight:700;margin-bottom:3px}
+.ssub{color:var(--muted);font-size:12px;margin-bottom:14px}
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
+.csm{background:var(--card2);border-radius:10px;border:1px solid var(--border);padding:10px}
+select,input[type=text],input[type=number],textarea{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 11px;font-size:13px;outline:none;-webkit-appearance:none}
+select:focus,input:focus,textarea:focus{border-color:var(--accent)}
+label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px}
+.fg{margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:10px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;width:100%}
+.bp{background:var(--accent);color:#fff}.bp:hover{opacity:.9}
+.bg{background:var(--green);color:#000}
+.br{background:#e53935;color:#fff}
+.bsm{padding:5px 12px;font-size:12px;width:auto;border-radius:7px}
+.week-tabs{display:flex;gap:8px;margin-bottom:14px}
+.wtab{flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
+.wtab.active{border-color:var(--accent);color:var(--accent);background:rgba(233,69,96,.08)}
+.day-block{margin-bottom:12px}
+.dlabel{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding:7px 0 5px;border-bottom:1px solid var(--border);margin-bottom:7px}
+.litem{background:var(--card2);border-radius:9px;border-left:3px solid var(--accent);padding:9px 11px;margin-bottom:5px;display:flex;align-items:flex-start}
+.lleft{flex:1}
+.lname{font-size:13px;font-weight:600}
+.linfo{font-size:11px;color:var(--muted);margin-top:2px}
+.ltime{font-size:12px;color:var(--accent);font-weight:700;white-space:nowrap;margin-left:auto;padding-left:6px}
+.tmuh{border-left-color:var(--blue)}.tsem{border-left-color:var(--purple)}
+.badge{display:inline-block;padding:2px 8px;border-radius:9px;font-size:10px;font-weight:600}
+.bred{background:rgba(233,69,96,.15);color:var(--accent)}
+.bgrn{background:rgba(0,200,83,.15);color:var(--green)}
+.born{background:rgba(255,109,0,.15);color:var(--orange)}
+.bblu{background:rgba(26,115,232,.15);color:var(--blue)}
+.divider{height:1px;background:var(--border);margin:12px 0}
+.tag{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;background:var(--card2);color:var(--muted);margin:2px}
+/* BAL */
+.bal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.bal-box{background:var(--card2);border-radius:10px;border:1px solid var(--border);padding:10px;text-align:center}
+.bal-num{font-size:24px;font-weight:700}
+.bal-lbl{font-size:10px;color:var(--muted);margin-top:2px}
+.bal-total{background:rgba(233,69,96,.1);border:1.5px solid var(--accent);border-radius:12px;padding:12px;text-align:center;margin-bottom:10px}
+.bal-total-num{font-size:32px;font-weight:700;color:var(--accent)}
+.range-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.range-row label{flex:1;margin:0;font-size:12px;color:var(--text)}
+.range-val{font-size:16px;font-weight:700;min-width:28px;text-align:right;color:var(--accent)}
+input[type=range]{flex:2;height:5px;border-radius:3px;background:var(--border);accent-color:var(--accent);padding:0;border:none}
+/* CALENDAR */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-title{font-size:15px;font-weight:700}
+.cal-nav{background:none;border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 12px;cursor:pointer;font-size:14px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.cal-day-name{font-size:10px;color:var(--muted);padding:3px 0;font-weight:600}
+.cal-cell{border-radius:7px;padding:5px 2px;font-size:12px;cursor:pointer;min-height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.cal-cell:hover{background:var(--card2)}
+.cal-cell.today{background:var(--accent);color:#fff;font-weight:700}
+.cal-cell.has-abs{position:relative}
+.cal-dot{width:5px;height:5px;border-radius:50%;background:var(--orange)}
+.cal-cell.other-month{color:var(--muted);opacity:.4}
+/* CHAT */
+.chat-box{border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:320px}
+.chat-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:80%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.4}
+.msg-mine{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.msg-other{background:var(--card2);color:var(--text);align-self:flex-start;border-bottom-left-radius:3px}
+.msg-sender{font-size:10px;color:var(--muted);margin-bottom:2px}
+.msg-time{font-size:10px;opacity:.7;margin-top:3px;text-align:right}
+.chat-input-row{display:flex;gap-6px;border-top:1px solid var(--border);padding:8px;gap:6px}
+.chat-input-row input{flex:1;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 11px;font-size:13px;outline:none}
+.send-btn{background:var(--accent);border:none;color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:16px}
+/* ABSENCES */
+.abs-bar-bg{width:100%;height:5px;background:var(--border);border-radius:3px;margin-top:5px}
+.abs-bar{height:5px;border-radius:3px;transition:.3s}
+.stulist{max-height:280px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;padding:6px;background:var(--card2)}
+.sli{padding:7px 9px;border-radius:7px;cursor:pointer;margin-bottom:3px;display:flex;align-items:center;gap:7px;font-size:12px;transition:.15s}
+.sli.sel{background:rgba(233,69,96,.15);border:1px solid var(--accent)}
+.sli:not(.sel){border:1px solid transparent}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border-radius:18px 18px 0 0;border:1px solid var(--border);padding:18px;width:100%;max-width:500px;max-height:88vh;overflow-y:auto}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:14px;display:flex;justify-content:space-between}
+.mcl{background:none;border:none;color:var(--muted);font-size:21px;cursor:pointer;line-height:1}
+.toast{position:fixed;bottom:62px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--green);color:#000;padding:9px 18px;border-radius:9px;font-size:12px;font-weight:600;opacity:0;transition:.3s;z-index:300;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.err{background:var(--accent);color:#fff}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Tk-120 <span>Admin</span></div>
+  <div class="abadge">ADMIN</div>
+</header>
+<main>
+
+<!-- CEDVEL -->
+<div id="pg-cedvel" class="page active">
+  <div class="stitle">Cədvəl</div>
+  <div class="ssub" id="cal-month-label"></div>
+  <div class="card" style="padding:10px">
+    <div class="cal-header">
+      <button class="cal-nav" onclick="calPrev()">‹</button>
+      <div class="cal-title" id="cal-title"></div>
+      <button class="cal-nav" onclick="calNext()">›</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+  <div class="week-tabs">
+    <button class="wtab active" onclick="switchWeek('alt',this)">ALT həftə</button>
+    <button class="wtab" onclick="switchWeek('ust',this)">ÜST həftə</button>
+  </div>
+  <div id="sch-container"></div>
+  <div class="divider"></div>
+  <div class="stitle" style="font-size:16px;margin-bottom:10px">💬 Qrup söhbəti</div>
+  <div class="chat-box">
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-input-row">
+      <input id="chat-in" placeholder="Mesaj yazın (Admin)..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="send-btn" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- QAYIB -->
+<div id="pg-qayib" class="page">
+  <div class="stitle">Qayıblar</div>
+  <div class="ssub">Dərs üzrə qayıb əlavə et</div>
+  <div class="card">
+    <div class="fg"><label>Fənn</label><select id="abs-subj"></select></div>
+    <div class="fg"><label>Tarix</label><input type="text" id="abs-date"></div>
+    <div class="fg"><label>Qayıb alanlar</label><div class="stulist" id="abs-stu-list"></div></div>
+    <button class="btn bp" onclick="saveAbs()">💾 Qayıbları Saxla</button>
+  </div>
+  <div class="divider"></div>
+  <div class="stitle" style="font-size:15px;margin-bottom:10px">Cari Qayıblar</div>
+  <div class="fg"><select id="abs-view-subj" onchange="renderAbsSummary()"></select></div>
+  <div id="abs-summary"></div>
+</div>
+
+<!-- BAL -->
+<div id="pg-bal" class="page">
+  <div class="stitle">Bal Sistemi</div>
+  <div class="ssub">Giriş balı + Semestr imtahan balı = 100</div>
+  <div class="card">
+    <div class="fg"><label>Tələbə</label><select id="bal-stu" onchange="loadBalForm()"></select></div>
+    <div class="fg"><label>Fənn</label><select id="bal-subj" onchange="loadBalForm()"></select></div>
+  </div>
+  <div id="bal-form"></div>
+</div>
+
+<!-- TELEBELER -->
+<div id="pg-tel" class="page">
+  <div class="stitle">Tələbələr</div>
+  <div class="ssub">Tk-120 • 29 tələbə</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px" id="tel-stats"></div>
+  <div id="tel-list"></div>
+</div>
+
+<!-- QEYD -->
+<div id="pg-qeyd" class="page">
+  <div class="stitle">Qeydlər</div>
+  <div class="ssub">Qrup üzrə qeydlər</div>
+  <div class="card">
+    <div class="fg"><textarea id="note-txt" rows="3" placeholder="Qeyd yazın..." style="resize:none"></textarea></div>
+    <button class="btn bp" onclick="saveNote()">➕ Əlavə et</button>
+  </div>
+  <div id="notes-list" style="margin-top:10px"></div>
+</div>
+
+</main>
+<nav class="bottom-nav">
+  <button class="ni active" onclick="showPage('cedvel',this)"><span class="ni-icon">📅</span>Cədvəl</button>
+  <button class="ni" onclick="showPage('qayib',this)"><span class="ni-icon">📋</span>Qayıb</button>
+  <button class="ni" onclick="showPage('bal',this)"><span class="ni-icon">🎯</span>Bal</button>
+  <button class="ni" onclick="showPage('tel',this)"><span class="ni-icon">👥</span>Tələbə</button>
+  <button class="ni" onclick="showPage('qeyd',this)"><span class="ni-icon">📝</span>Qeyd</button>
+</nav>
+<div class="toast" id="toast"></div>
+<div class="modal-overlay" id="stu-modal">
+  <div class="modal">
+    <div class="modal-title"><span id="modal-name"></span><button class="mcl" onclick="closeModal()">✕</button></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const STUDENTS=[
+  "Abdullayev Uğur Aqil oğlu","Ağakərimov Baloğlan Seyran oğlu",
+  "Babazada Nərmin Ələkbər qızı","Bağırov Xalid Vahid oğlu",
+  "Balaqadaşova Mələk Elşad qızı","Cəfərova Nərmin Yaşar qızı",
+  "Əhmədov Nahid Habil oğlu","Ələkbərova Leyli Natiq qızı",
+  "Əliyev Mehdi Rüfət oğlu","Əliyeva Leyla Rauf qızı",
+  "Əlizadə Məryəm Rəşad qızı","Əskərova Zəhra Samir qızı",
+  "Fərəcli Hüseyn Mehdiqulu oğlu","Güləliyeva Şəbnəm Mətləb qızı",
+  "Həmidi Xədicə Yaşar qızı","Həsənli Nasir Mübariz oğlu",
+  "Kərimli Elvin Füzuli oğlu","Məmmədova İlqarə Ramin qızı",
+  "Məmmədzadə Əkbər Əli oğlu","Misirli Emil Ramil oğlu",
+  "Muradov Zakir Rahib oğlu","Novruzova Ayla Natiqovna",
+  "Qayıbova Aysu İsa qızı","Qənbərova Rəşidə Rəşid qızı",
+  "Qurbanova Lamiyyə Rəşad qızı","Rəfiyev Rafiq Namiq oğlu",
+  "Rzayeva Səlimə Nuru qızı","Xəlilova Ayan Malik qızı",
+  "Yusifzadə Hüseyn Aydın oğlu"
+];
+const SUBJECTS=[
+  {name:"Azərbaycan tarixi",limit:9},
+  {name:"Xətti cəbr",limit:5},
+  {name:"XDIAK-2",limit:5},
+  {name:"Diskret riyaziyyat",limit:7},
+  {name:"Riyazi analiz-2",limit:7},
+  {name:"Proqramlaşdırmanın əsasları-2",limit:7}
+];
+const SCHEDULE={
+  alt:[
+    {day:"1-ci gün",lessons:[
+      {name:"Xətti cəbr",type:"muh",teacher:"Eyvazov Elşad",room:"408",time:"08:30–10:05"},
+      {name:"Xətti cəbr",type:"sem",teacher:"Eyvazov Elşad",room:"413",time:"10:15–11:50"},
+      {name:"Azərbaycan tarixi",type:"sem",teacher:"İsmayılova Zəhra",room:"311",time:"12:00–13:35"},
+    ]},
+    {day:"2-ci gün",lessons:[
+      {name:"XDIAK-2",type:"sem",teacher:"Quliyeva Dilşad",room:"404",time:"08:30–10:05"},
+      {name:"Proqramlaşdırmanın əsasları-2",type:"muh",teacher:"Hacıyev Rəmzi",room:"317",time:"10:15–11:50"},
+    ]},
+    {day:"3-cü gün",lessons:[],rest:true},
+    {day:"4-cü gün",lessons:[
+      {name:"Diskret riyaziyyat",type:"muh",teacher:"Əliyeva Səadət",room:"405",time:"10:15–11:50"},
+      {name:"Diskret riyaziyyat",type:"sem",teacher:"Əliyeva Səadət",room:"315",time:"12:00–13:35"},
+      {name:"Proqramlaşdırmanın əsasları-2",type:"sem",teacher:"Hacıyev Rəmzi / Dadaşzadə Günay",room:"208/409",time:"13:50–15:20"},
+    ]},
+    {day:"5-ci gün",lessons:[
+      {name:"Riyazi analiz-2",type:"sem",teacher:"Eyvazov Elşad",room:"411",time:"08:30–10:05"},
+      {name:"Riyazi analiz-2",type:"muh",teacher:"Eyvazov Elşad",room:"400",time:"10:15–11:50"},
+      {name:"Azərbaycan tarixi",type:"sem",teacher:"Məmmədova Sevinc",room:"408",time:"12:00–13:35"},
+    ]},
+  ],
+  ust:[
+    {day:"1-ci gün",lessons:[
+      {name:"Xətti cəbr",type:"muh",teacher:"Eyvazov Elşad",room:"408",time:"08:30–10:05"},
+      {name:"Azərbaycan tarixi",type:"muh",teacher:"İsmayılova Zəhra",room:"408",time:"10:15–11:50"},
+      {name:"Azərbaycan tarixi",type:"muh",teacher:"İsmayılova Zəhra",room:"311",time:"12:00–13:35"},
+    ]},
+    {day:"2-ci gün",lessons:[
+      {name:"XDIAK-2",type:"sem",teacher:"Quliyeva Dilşad",room:"200",time:"08:30–10:05"},
+      {name:"Proqramlaşdırmanın əsasları-2",type:"muh",teacher:"Hacıyev Rəmzi",room:"317",time:"10:15–11:50"},
+      {name:"XDIAK-2",type:"sem",teacher:"Quliyeva Dilşad",room:"404",time:"08:30–10:05"},
+    ]},
+    {day:"3-cü gün",lessons:[],rest:true},
+    {day:"4-cü gün",lessons:[
+      {name:"Diskret riyaziyyat",type:"muh",teacher:"Əliyeva Səadət",room:"405",time:"10:15–11:50"},
+      {name:"Diskret riyaziyyat",type:"sem",teacher:"Əliyeva Səadət",room:"315",time:"12:00–13:35"},
+      {name:"Proqramlaşdırmanın əsasları-2",type:"sem",teacher:"Hacıyev Rəmzi / Dadaşzadə Günay",room:"208/409",time:"13:50–15:20"},
+    ]},
+    {day:"5-ci gün",lessons:[
+      {name:"Riyazi analiz-2",type:"sem",teacher:"Eyvazov Elşad",room:"411",time:"08:30–10:05"},
+      {name:"Riyazi analiz-2",type:"muh",teacher:"Eyvazov Elşad",room:"400",time:"10:15–11:50"},
+      {name:"Azərbaycan tarixi",type:"sem",teacher:"Məmmədova Sevinc",room:"408",time:"12:00–13:35"},
+    ]},
+  ]
+};
+const AZ_MONTHS=["Yanvar","Fevral","Mart","Aprel","May","İyun","İyul","Avqust","Sentyabr","Oktyabr","Noyabr","Dekabr"];
+const AZ_DAYS=["B.e.","Ç.a.","Çər.","C.a.","Cüm.","Şən.","Baz."];
+
+let curWeek='alt', calDate=new Date(), calDate2=new Date();
+calDate2.setDate(1);
+
+function gd(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
+function sd(k,v){localStorage.setItem(k,JSON.stringify(v))}
+function toast(m,err=false){const t=document.getElementById('toast');t.textContent=m;t.className='toast show'+(err?' err':'');setTimeout(()=>t.className='toast',2500)}
+
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  if(id==='qayib'){buildAbsStuList();renderAbsSummary()}
+  if(id==='bal')loadBalForm();
+  if(id==='tel')renderTel();
+  if(id==='qeyd')renderNotes();
+  if(id==='cedvel'){renderChat()}
+}
+
+// CALENDAR
+function renderCal(){
+  const y=calDate2.getFullYear(), m=calDate2.getMonth();
+  document.getElementById('cal-title').textContent=AZ_MONTHS[m]+' '+y;
+  const abs=gd('absences',{});
+  const absDates=new Set();
+  Object.values(abs).forEach(sObj=>Object.values(sObj).forEach(dates=>dates.forEach(d=>absDates.add(d))));
+  const grid=document.getElementById('cal-grid');
+  let html=AZ_DAYS.map(d=>`<div class="cal-day-name">${d}</div>`).join('');
+  const first=new Date(y,m,1).getDay();
+  const offset=(first===0?6:first-1);
+  const prev=new Date(y,m,0).getDate();
+  for(let i=0;i<offset;i++){const d=prev-offset+1+i;html+=`<div class="cal-cell other-month">${d}</div>`}
+  const daysInMonth=new Date(y,m+1,0).getDate();
+  const today=new Date();
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=String(d).padStart(2,'0')+'.'+String(m+1).padStart(2,'0')+'.'+y;
+    const isToday=today.getDate()===d&&today.getMonth()===m&&today.getFullYear()===y;
+    const hasAbs=absDates.has(dateStr);
+    html+=`<div class="cal-cell${isToday?' today':''}${hasAbs?' has-abs':''}" onclick="calDayClick('${dateStr}')">
+      ${d}${hasAbs&&!isToday?'<div class="cal-dot"></div>':''}
+    </div>`;
+  }
+  const rem=(7-(offset+daysInMonth)%7)%7;
+  for(let i=1;i<=rem;i++)html+=`<div class="cal-cell other-month">${i}</div>`;
+  grid.innerHTML=html;
+  document.getElementById('cal-month-label').textContent='Bu ay: '+AZ_MONTHS[m]+' '+y;
+}
+function calPrev(){calDate2.setMonth(calDate2.getMonth()-1);renderCal()}
+function calNext(){calDate2.setMonth(calDate2.getMonth()+1);renderCal()}
+function calDayClick(dateStr){
+  const abs=gd('absences',{});
+  let found=[];
+  STUDENTS.forEach(s=>{
+    const sAbs=abs[s]||{};
+    const subjs=Object.entries(sAbs).filter(([,dates])=>dates.includes(dateStr)).map(([subj])=>subj);
+    if(subjs.length)found.push({name:s,subjs});
+  });
+  if(!found.length){toast('Bu tarixdə qayıb yoxdur');return}
+  document.getElementById('modal-name').textContent='📅 '+dateStr+' — Qayıb alanlar';
+  document.getElementById('modal-body').innerHTML=found.map(f=>`
+    <div class="csm" style="margin-bottom:6px">
+      <div style="font-size:13px;font-weight:600">${f.name}</div>
+      <div style="margin-top:4px">${f.subjs.map(s=>`<span class="badge bred" style="margin-right:4px">${s}</span>`).join('')}</div>
+    </div>`).join('');
+  document.getElementById('stu-modal').classList.add('open');
+}
+
+// SCHEDULE
+function switchWeek(w,el){curWeek=w;document.querySelectorAll('.wtab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderSch()}
+function renderSch(){
+  const c=document.getElementById('sch-container');
+  c.innerHTML=SCHEDULE[curWeek].map(d=>{
+    if(d.rest)return`<div class="day-block"><div class="dlabel">🌿 ${d.day} — İstirahət</div><div class="csm" style="color:var(--green);text-align:center;padding:14px;font-style:italic">İstirahət günü</div></div>`;
+    return`<div class="day-block"><div class="dlabel">📅 ${d.day}</div>
+    ${d.lessons.map(l=>`<div class="litem ${l.type==='muh'?'tmuh':'tsem'}">
+      <div class="lleft">
+        <div class="lname">${l.name} <span class="badge ${l.type==='muh'?'bblu':'born'}" style="font-size:9px;padding:1px 6px">${l.type==='muh'?'mühazirə':'seminar'}</span></div>
+        <div class="linfo">👨‍🏫 ${l.teacher} &nbsp;|&nbsp; 🚪 ${l.room}</div>
+      </div>
+      <div class="ltime">${l.time}</div>
+    </div>`).join('')}</div>`;
+  }).join('');
+}
+
+// CHAT
+function renderChat(){
+  const msgs=gd('chat',[]);
+  const c=document.getElementById('chat-msgs');
+  c.innerHTML=msgs.map(m=>`<div class="msg ${m.sender==='Admin'?'msg-mine':'msg-other'}">
+    ${m.sender!=='Admin'?`<div class="msg-sender">${m.sender}</div>`:''}
+    ${m.text}
+    <div class="msg-time">${m.time}</div>
+  </div>`).join('');
+  c.scrollTop=c.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('chat-in');
+  const txt=inp.value.trim();if(!txt)return;
+  let msgs=gd('chat',[]);
+  const now=new Date();
+  msgs.push({sender:'Admin',text:txt,time:String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')});
+  sd('chat',msgs);inp.value='';renderChat();
+}
+
+// ABSENCES
+function buildAbsStuList(){
+  const sel=gd('abs-sel-tmp',[]);
+  const c=document.getElementById('abs-stu-list');
+  c.innerHTML=STUDENTS.map((s,i)=>`
+    <div class="sli${sel.includes(i)?' sel':''}" onclick="toggleStu(${i})">
+      <span>${sel.includes(i)?'☑':'⬜'}</span>
+      <span>${i+1}. ${s}</span>
+    </div>`).join('');
+}
+function toggleStu(i){
+  let sel=gd('abs-sel-tmp',[]);
+  sel.includes(i)?sel=sel.filter(x=>x!==i):sel.push(i);
+  sd('abs-sel-tmp',sel);buildAbsStuList();
+}
+function saveAbs(){
+  const subj=document.getElementById('abs-subj').value;
+  const date=document.getElementById('abs-date').value.trim();
+  const selected=gd('abs-sel-tmp',[]);
+  if(!date)return toast('Tarix daxil edin!',true);
+  if(!selected.length)return toast('Tələbə seçin!',true);
+  let abs=gd('absences',{});
+  selected.forEach(i=>{
+    const n=STUDENTS[i];
+    if(!abs[n])abs[n]={};
+    if(!abs[n][subj])abs[n][subj]=[];
+    if(!abs[n][subj].includes(date))abs[n][subj].push(date);
+  });
+  sd('absences',abs);sd('abs-sel-tmp',[]);
+  buildAbsStuList();
+  document.getElementById('abs-date').value='';
+  toast(`✅ ${selected.length} tələbə üçün qayıb saxlandı`);
+  renderAbsSummary();renderCal();
+}
+function renderAbsSummary(){
+  const subj=document.getElementById('abs-view-subj').value;
+  const abs=gd('absences',{});
+  const limit=SUBJECTS.find(s=>s.name===subj)?.limit||0;
+  const c=document.getElementById('abs-summary');
+  c.innerHTML=STUDENTS.map((s,i)=>{
+    const count=(abs[s]?.[subj]||[]).length;
+    const pct=Math.min(100,Math.round(count/limit*100));
+    const color=pct>=100?'var(--accent)':pct>=70?'var(--orange)':'var(--green)';
+    return`<div class="csm" style="margin-bottom:7px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:12px;flex:1">${i+1}. ${s}</span>
+        <span style="font-size:18px;font-weight:700;color:${color}">${count}</span>
+        <span style="font-size:10px;color:var(--muted)">/ ${limit}</span>
+      </div>
+      <div class="abs-bar-bg"><div class="abs-bar" style="width:${pct}%;background:${color}"></div></div>
+      ${(abs[s]?.[subj]||[]).map(d=>`<span class="tag">${d}</span>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+// BAL SİSTEMİ
+// DAV: qayıb yoxdur=10, yarısını işlədib=9, limitdədir=8, keçib=8-dən kəsir(hər artıq qayıb -1)
+// KOL: ((K1+K2+K3)/3)*2 → max 20
+// AKT: daxil edilmiş aktivlik dəyərlərinin ortalaması → max 10
+function calcDav(absCount, limit){
+  if(absCount===0) return 10;
+  const half=Math.ceil(limit/2);
+  if(absCount<half) return 10;           // yarısına çatmayıb → 10
+  if(absCount===half) return 9;          // tam yarısı → 9
+  if(absCount===limit) return 8;         // tam limitdə → 8
+  if(absCount>limit) return Math.max(0, 8-(absCount-limit)); // keçib → kəsir
+  // half < absCount < limit → 9-dan aşağı düşür
+  return Math.max(8, 9-Math.floor((absCount-half)/(limit-half)));
+}
+function calcGiris(data, absCount, limit){
+  const dav=calcDav(absCount,limit);
+  const k=parseFloat((((data.k1||0)+(data.k2||0)+(data.k3||0))/3*2).toFixed(2));
+  const si=data.si||0;
+  const aktList=data.aktList||[];
+  const akt=aktList.length?parseFloat((aktList.reduce((a,b)=>a+b,0)/aktList.length).toFixed(2)):0;
+  return Math.min(50, parseFloat((si+dav+k+akt).toFixed(1)));
+}
+function calcTotal(data, absCount, limit){
+  const giris=calcGiris(data,absCount,limit);
+  const imtahan=data.imtahan||0;
+  return {giris, imtahan, total:Math.min(100,parseFloat((giris+imtahan).toFixed(1))),dav:calcDav(absCount,limit)};
+}
+function loadBalForm(){
+  const stu=document.getElementById('bal-stu').value;
+  const subj=document.getElementById('bal-subj').value;
+  if(!stu||!subj){document.getElementById('bal-form').innerHTML='';return}
+  const key='bal:'+stu+':'+subj;
+  const data=gd(key,{si:0,k1:0,k2:0,k3:0,aktList:[],imtahan:0});
+  const abs=gd('absences',{});
+  const absCount=(abs[stu]?.[subj]||[]).length;
+  const limit=SUBJECTS.find(s=>s.name===subj)?.limit||7;
+  const dav=calcDav(absCount,limit);
+  const kVal=parseFloat((((data.k1||0)+(data.k2||0)+(data.k3||0))/3*2).toFixed(1));
+  const aktList=data.aktList||[];
+  const aktAvg=aktList.length?parseFloat((aktList.reduce((a,b)=>a+b,0)/aktList.length).toFixed(1)):0;
+  const {giris,imtahan,total}=calcTotal(data,absCount,limit);
+
+  function sliderRow(id,label,val,max,step){
+    step=step||0.5;
+    return`<div class="range-row">
+      <label>${label}</label>
+      <input type="range" min="0" max="${max}" step="${step}" value="${val}" oninput="balChange('${key}','${stu}','${subj}','${id}',parseFloat(this.value))">
+      <span class="range-val" id="rv-${id}">${val}</span>
+    </div>`;
+  }
+  const davColor=dav===10?'var(--green)':dav>=8?'var(--orange)':'var(--accent)';
+  const half=Math.ceil(limit/2);
+  document.getElementById('bal-form').innerHTML=`
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">🎯 Giriş Balı (max 50)</div>
+
+      ${sliderRow('si','📄 Sərbəst iş (max 10)',data.si||0,10)}
+
+      <div style="background:var(--card2);border-radius:9px;padding:10px;margin-bottom:10px;border:1px solid var(--border)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-size:12px;font-weight:600">📅 Davamiyyət (avtomatik)</span>
+          <span style="font-size:22px;font-weight:700;color:${davColor}">${dav} <span style="font-size:12px;color:var(--muted)">/ 10</span></span>
+        </div>
+        <div style="font-size:11px;color:var(--muted)">
+          Qayıb: <b>${absCount}</b> | Limit: <b>${limit}</b> | Yarısı: <b>${half}</b><br>
+          ${absCount===0?'<span style="color:var(--green)">Qayıb yoxdur → 10 bal</span>':
+            absCount===half?'<span style="color:var(--orange)">Tam yarısı → 9 bal</span>':
+            absCount>limit?`<span style="color:var(--accent)">Limit aşılıb → ${dav} bal (kəsir)</span>`:
+            absCount===limit?'<span style="color:var(--accent)">Tam limitdə → 8 bal</span>':
+            absCount>half?`<span style="color:var(--orange)">Yarısından çox → ${dav} bal</span>`:
+            '<span style="color:var(--green)">Yarıdan az → 10 bal</span>'}
+        </div>
+      </div>
+
+      ${sliderRow('k1','📝 Kollekvium 1 (max 10)',data.k1||0,10)}
+      ${sliderRow('k2','📝 Kollekvium 2 (max 10)',data.k2||0,10)}
+      ${sliderRow('k3','📝 Kollekvium 3 (max 10)',data.k3||0,10)}
+      <div style="font-size:11px;color:var(--muted);margin:-6px 0 10px 4px">
+        Kollekvium balı: ((${data.k1||0}+${data.k2||0}+${data.k3||0})/3)×2 = <b style="color:var(--purple)">${kVal} / 20</b>
+      </div>
+
+      <div style="background:var(--card2);border-radius:9px;padding:10px;margin-bottom:10px;border:1px solid var(--border)">
+        <div style="font-size:12px;font-weight:600;margin-bottom:8px">⚡ Aktivlik (max 10) — ortalama</div>
+        <div id="akt-list-display" style="margin-bottom:8px"></div>
+        <div style="display:flex;gap:6px;align-items:center">
+          <input type="number" id="akt-input" min="0" max="10" step="0.5" placeholder="0–10" style="width:80px;padding:7px">
+          <button class="btn bp" style="width:auto;padding:7px 14px;font-size:12px" onclick="addAkt('${key}','${stu}','${subj}')">➕ Əlavə et</button>
+        </div>
+        <div style="margin-top:8px;font-size:13px">Ortalama: <b style="color:var(--orange)" id="rv-akt">${aktAvg}</b> / 10</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px">📊 Semestr İmtahanı (max 50)</div>
+      ${sliderRow('imtahan','🎓 İmtahan balı',data.imtahan||0,50,1)}
+    </div>
+
+    <div class="bal-total" id="bal-total-box">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;margin-bottom:12px">
+        <div class="bal-box"><div class="bal-num" style="color:var(--blue);font-size:18px" id="b-si">${data.si||0}</div><div class="bal-lbl">S.İş</div></div>
+        <div class="bal-box"><div class="bal-num" style="color:${davColor};font-size:18px" id="b-dav">${dav}</div><div class="bal-lbl">Dav.</div></div>
+        <div class="bal-box"><div class="bal-num" style="color:var(--purple);font-size:18px" id="b-kol">${kVal}</div><div class="bal-lbl">Kol.</div></div>
+        <div class="bal-box"><div class="bal-num" style="color:var(--orange);font-size:18px" id="b-aktd">${aktAvg}</div><div class="bal-lbl">Akt.</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+        <div class="bal-box"><div class="bal-num" style="color:var(--blue)" id="b-giris">${giris}</div><div class="bal-lbl">Giriş / 50</div></div>
+        <div class="bal-box"><div class="bal-num" style="color:var(--green)" id="b-imtahan">${imtahan}</div><div class="bal-lbl">İmtahan / 50</div></div>
+      </div>
+      <div class="bal-total-num" id="b-total">${total}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">Ümumi bal / 100</div>
+    </div>
+    <button class="btn bp" onclick="saveBal('${key}')">💾 Balı Saxla</button>
+  `;
+  renderAktList(key);
+}
+
+function renderAktList(key){
+  const data=gd(key,{aktList:[]});
+  const list=data.aktList||[];
+  const el=document.getElementById('akt-list-display');
+  if(!el)return;
+  if(!list.length){el.innerHTML='<div style="font-size:11px;color:var(--muted)">Hələ aktivlik daxil edilməyib</div>';return}
+  el.innerHTML=list.map((v,i)=>`<span class="tag" style="background:rgba(255,109,0,.15);color:var(--orange)">${v} <span onclick="delAkt('${key}',${i})" style="cursor:pointer;margin-left:3px;opacity:.7">✕</span></span>`).join('');
+}
+
+function addAkt(key,stu,subj){
+  const inp=document.getElementById('akt-input');
+  const v=parseFloat(inp.value);
+  if(isNaN(v)||v<0||v>10)return toast('0–10 arası daxil edin!',true);
+  const data=gd(key,{aktList:[]});
+  if(!data.aktList)data.aktList=[];
+  data.aktList.push(v);
+  sd(key,data);
+  inp.value='';
+  renderAktList(key);
+  refreshBal(key,stu,subj);
+}
+
+function delAkt(key,idx){
+  const data=gd(key,{aktList:[]});
+  data.aktList.splice(idx,1);
+  sd(key,data);
+  const parts=key.split(':');
+  renderAktList(key);
+  refreshBal(key,parts[1],parts[2]);
+}
+
+function balChange(key,stu,subj,field,val){
+  const data=gd(key,{si:0,k1:0,k2:0,k3:0,aktList:[],imtahan:0});
+  data[field]=val;
+  sd(key,data);
+  const el=document.getElementById('rv-'+field);
+  if(el)el.textContent=val;
+  refreshBal(key,stu,subj);
+}
+
+function refreshBal(key,stu,subj){
+  const data=gd(key,{si:0,k1:0,k2:0,k3:0,aktList:[],imtahan:0});
+  const abs=gd('absences',{});
+  const absCount=(abs[stu]?.[subj]||[]).length;
+  const limit=SUBJECTS.find(s=>s.name===subj)?.limit||7;
+  const dav=calcDav(absCount,limit);
+  const kVal=parseFloat((((data.k1||0)+(data.k2||0)+(data.k3||0))/3*2).toFixed(1));
+  const aktList=data.aktList||[];
+  const aktAvg=aktList.length?parseFloat((aktList.reduce((a,b)=>a+b,0)/aktList.length).toFixed(1)):0;
+  const {giris,imtahan,total}=calcTotal(data,absCount,limit);
+  const davColor=dav===10?'var(--green)':dav>=8?'var(--orange)':'var(--accent)';
+  const upd=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val};
+  upd('b-si',data.si||0); upd('b-dav',dav); upd('b-kol',kVal);
+  upd('b-aktd',aktAvg); upd('rv-akt',aktAvg);
+  upd('b-giris',giris); upd('b-imtahan',imtahan); upd('b-total',total);
+  // kol formula hint
+  const kHint=document.querySelector('#bal-form [id]');
+  const kHintEl=document.getElementById('rv-k1')||document.getElementById('rv-k2')||document.getElementById('rv-k3');
+}
+
+function saveBal(key){
+  toast('✅ Bal saxlandı');
+}
+
+// TELEBELER
+function renderTel(){
+  const abs=gd('absences',{});
+  const totalAbs=Object.values(abs).reduce((s,v)=>s+Object.values(v).reduce((a,b)=>a+b.length,0),0);
+  document.getElementById('tel-stats').innerHTML=`
+    <div class="bal-box" style="background:var(--card2)"><div class="bal-num">${STUDENTS.length}</div><div class="bal-lbl">Tələbə</div></div>
+    <div class="bal-box" style="background:var(--card2)"><div class="bal-num" style="color:var(--orange)">${totalAbs}</div><div class="bal-lbl">Ümumi qayıb</div></div>
+    <div class="bal-box" style="background:var(--card2)"><div class="bal-num" style="color:var(--green)">${SUBJECTS.length}</div><div class="bal-lbl">Fənn</div></div>`;
+  document.getElementById('tel-list').innerHTML=STUDENTS.map((s,i)=>{
+    const sAbs=abs[s]?Object.values(abs[s]).reduce((a,b)=>a+b.length,0):0;
+    // calc average total
+    let totalBal=0,subjCount=0;
+    SUBJECTS.forEach(subj=>{
+      const key='bal:'+s+':'+subj.name;
+      const data=gd(key,null);
+      if(data&&(data.si||data.k1||data.k2||data.k3||(data.aktList&&data.aktList.length)||data.imtahan)){
+        const absC=(abs[s]?.[subj.name]||[]).length;
+        totalBal+=calcTotal(data,absC,subj.limit).total;
+        subjCount++;
+      }
+    });
+    const avgBal=subjCount?Math.round(totalBal/subjCount):null;
+    return`<div class="csm" style="margin-bottom:7px;cursor:pointer" onclick="openStuModal('${s.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="width:34px;height:34px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0">${i+1}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${s}</div>
+          <div style="font-size:11px;margin-top:3px">
+            <span class="badge ${sAbs>0?'bred':'bgrn'}">${sAbs} qayıb</span>
+            ${avgBal!==null?`<span class="badge bblu" style="margin-left:4px">⌀ ${avgBal} bal</span>`:''}
+          </div>
+        </div>
+        <span style="color:var(--muted)">›</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openStuModal(name){
+  document.getElementById('modal-name').textContent=name;
+  const abs=gd('absences',{});
+  let html='<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--accent)">📊 Bal vəziyyəti</div>';
+  SUBJECTS.forEach(subj=>{
+    const key='bal:'+name+':'+subj.name;
+    const data=gd(key,null);
+    const absC=(abs[name]?.[subj.name]||[]).length;
+    if(data&&(data.si||data.k1||data.k2||data.k3||(data.aktList&&data.aktList.length)||data.imtahan)){
+      const {giris,imtahan,total,dav}=calcTotal(data,absC,subj.limit);
+      const aktList=data.aktList||[];
+      const aktAvg=aktList.length?parseFloat((aktList.reduce((a,b)=>a+b,0)/aktList.length).toFixed(1)):0;
+      const kVal=parseFloat((((data.k1||0)+(data.k2||0)+(data.k3||0))/3*2).toFixed(1));
+      const color=total>=85?'var(--green)':total>=60?'var(--orange)':'var(--accent)';
+      html+=`<div class="csm" style="margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div style="font-size:12px;font-weight:600">${subj.name}</div>
+          <div style="font-size:18px;font-weight:700;color:${color}">${total}</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">
+          S.İş:<b style="color:var(--blue)">${data.si||0}</b> Dav:<b style="color:var(--green)">${dav}</b> Kol:<b style="color:var(--purple)">${kVal}</b> Akt:<b style="color:var(--orange)">${aktAvg}</b> → Giriş:<b style="color:var(--blue)">${giris}</b> + İmt:<b style="color:var(--green)">${imtahan}</b>
+        </div>
+      </div>`;
+    } else {
+      html+=`<div class="csm" style="margin-bottom:6px">
+        <div style="font-size:12px;color:var(--muted)">${subj.name} — bal daxil edilməyib &nbsp;<span class="badge born">${absC} qayıb</span></div>
+      </div>`;
+    }
+  });
+  html+='<div class="divider"></div><div style="font-size:13px;font-weight:700;margin-bottom:8px;color:var(--accent)">📋 Qayıb detalı</div>';
+  const sAbs=abs[name]||{};
+  if(!Object.keys(sAbs).length)html+='<div style="color:var(--muted);font-size:12px">Qayıb yoxdur</div>';
+  else Object.entries(sAbs).forEach(([s,dates])=>{
+    const lim=SUBJECTS.find(x=>x.name===s)?.limit||0;
+    html+=`<div style="margin-bottom:8px"><div style="font-size:12px;font-weight:600">${s} <span class="badge ${dates.length>=lim?'bred':'born'}">${dates.length}/${lim}</span></div>
+    <div>${dates.map(d=>`<span class="tag">${d}</span>`).join('')}</div></div>`;
+  });
+  document.getElementById('modal-body').innerHTML=html;
+  document.getElementById('stu-modal').classList.add('open');
+}
+function closeModal(){document.getElementById('stu-modal').classList.remove('open')}
+
+// NOTES
+function saveNote(){
+  const txt=document.getElementById('note-txt').value.trim();
+  if(!txt)return toast('Qeyd boş!',true);
+  let notes=gd('notes',[]);
+  notes.unshift({text:txt,date:new Date().toLocaleString('az')});
+  sd('notes',notes);document.getElementById('note-txt').value='';
+  toast('✅ Qeyd saxlandı');renderNotes();
+}
+function renderNotes(){
+  const notes=gd('notes',[]);
+  const c=document.getElementById('notes-list');
+  if(!notes.length){c.innerHTML='<div style="color:var(--muted);text-align:center;padding:18px">Qeyd yoxdur</div>';return}
+  c.innerHTML=notes.map((n,i)=>`<div class="card" style="margin-bottom:8px">
+    <div style="font-size:13px;white-space:pre-wrap">${n.text}</div>
+    <div style="display:flex;justify-content:space-between;margin-top:8px;align-items:center">
+      <span style="font-size:10px;color:var(--muted)">${n.date}</span>
+      <button class="btn br bsm" onclick="delNote(${i})">Sil</button>
+    </div>
+  </div>`).join('');
+}
+function delNote(i){let n=gd('notes',[]);n.splice(i,1);sd('notes',n);renderNotes();toast('🗑️ Silindi')}
+
+// INIT
+function init(){
+  // Subjects to selects
+  ['abs-subj','abs-view-subj'].forEach(id=>{
+    const s=document.getElementById(id);
+    SUBJECTS.forEach(subj=>{const o=document.createElement('option');o.value=subj.name;o.textContent=subj.name;s.appendChild(o)});
+  });
+  document.getElementById('abs-subj').addEventListener('change',buildAbsStuList);
+  // Students to bal
+  const bs=document.getElementById('bal-stu');
+  STUDENTS.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;bs.appendChild(o)});
+  const bsub=document.getElementById('bal-subj');
+  SUBJECTS.forEach(s=>{const o=document.createElement('option');o.value=s.name;o.textContent=s.name;bsub.appendChild(o)});
+  // Today date
+  const today=new Date();
+  document.getElementById('abs-date').value=String(today.getDate()).padStart(2,'0')+'.'+String(today.getMonth()+1).padStart(2,'0')+'.'+today.getFullYear();
+  renderCal();renderSch();renderChat();buildAbsStuList();
+}
+init();
+</script>
+</body>
+</html>

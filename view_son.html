@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tk-120 — Cədvəl</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0f1a;--card:#1a1a2e;--card2:#16213e;
+  --accent:#e94560;--blue:#1a73e8;--green:#00c853;
+  --orange:#ff6d00;--purple:#7c4dff;
+  --text:#e0e0e0;--muted:#888;--border:#2a2a4a;
+  --hh:56px;--nh:50px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',Arial,sans-serif;min-height:100vh;overflow-x:hidden}
+header{position:fixed;top:0;left:0;right:0;height:var(--hh);background:var(--card);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:100}
+.logo{font-size:18px;font-weight:700;color:var(--accent)}
+.logo span{color:var(--text);font-weight:400;font-size:13px;margin-left:8px}
+.vbadge{background:var(--blue);color:#fff;font-size:11px;padding:3px 10px;border-radius:12px;font-weight:600}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:var(--nh);background:var(--card);border-top:1px solid var(--border);display:flex;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;color:var(--muted);font-size:9px;border:none;background:none;transition:.2s;padding:4px 2px}
+.ni.active{color:var(--accent)}.ni-icon{font-size:19px}
+main{margin-top:var(--hh);margin-bottom:var(--nh);padding:14px}
+.page{display:none}.page.active{display:block}
+.stitle{font-size:20px;font-weight:700;margin-bottom:3px}
+.ssub{color:var(--muted);font-size:12px;margin-bottom:14px}
+.card{background:var(--card);border-radius:14px;border:1px solid var(--border);padding:14px;margin-bottom:10px}
+.csm{background:var(--card2);border-radius:10px;border:1px solid var(--border);padding:10px}
+select,input[type=text]{width:100%;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 11px;font-size:13px;outline:none;-webkit-appearance:none}
+select:focus,input:focus{border-color:var(--accent)}
+label{font-size:11px;color:var(--muted);display:block;margin-bottom:5px}
+.fg{margin-bottom:12px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:10px 18px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;width:100%}
+.bp{background:var(--accent);color:#fff}
+.week-tabs{display:flex;gap:8px;margin-bottom:14px}
+.wtab{flex:1;padding:9px;border-radius:10px;border:1.5px solid var(--border);background:none;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer}
+.wtab.active{border-color:var(--accent);color:var(--accent);background:rgba(233,69,96,.08)}
+.day-block{margin-bottom:12px}
+.dlabel{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;padding:7px 0 5px;border-bottom:1px solid var(--border);margin-bottom:7px}
+.litem{background:var(--card2);border-radius:9px;border-left:3px solid var(--accent);padding:9px 11px;margin-bottom:5px;display:flex;align-items:flex-start}
+.lleft{flex:1}.lname{font-size:13px;font-weight:600}
+.linfo{font-size:11px;color:var(--muted);margin-top:2px}
+.ltime{font-size:12px;color:var(--accent);font-weight:700;white-space:nowrap;margin-left:auto;padding-left:6px}
+.tmuh{border-left-color:var(--blue)}.tsem{border-left-color:var(--purple)}
+.badge{display:inline-block;padding:2px 8px;border-radius:9px;font-size:10px;font-weight:600}
+.bred{background:rgba(233,69,96,.15);color:var(--accent)}
+.bgrn{background:rgba(0,200,83,.15);color:var(--green)}
+.born{background:rgba(255,109,0,.15);color:var(--orange)}
+.bblu{background:rgba(26,115,232,.15);color:var(--blue)}
+.divider{height:1px;background:var(--border);margin:12px 0}
+.tag{display:inline-block;padding:2px 7px;border-radius:6px;font-size:10px;background:var(--card2);color:var(--muted);margin:2px}
+/* BAL */
+.bal-ring-wrap{display:flex;flex-direction:column;align-items:center;margin-bottom:14px}
+.bal-ring{position:relative;width:120px;height:120px}
+.bal-ring svg{transform:rotate(-90deg)}
+.bal-ring-txt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.bal-ring-num{font-size:28px;font-weight:700;color:var(--accent)}
+.bal-ring-lbl{font-size:11px;color:var(--muted)}
+.bal-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)}
+.bal-row:last-child{border-bottom:none}
+.bal-row-lbl{font-size:13px;color:var(--muted)}
+.bal-row-val{font-size:16px;font-weight:700}
+/* CAL */
+.cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.cal-title{font-size:15px;font-weight:700}
+.cal-nav{background:none;border:1px solid var(--border);color:var(--text);border-radius:7px;padding:5px 12px;cursor:pointer;font-size:14px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center}
+.cal-day-name{font-size:10px;color:var(--muted);padding:3px 0;font-weight:600}
+.cal-cell{border-radius:7px;padding:5px 2px;font-size:12px;cursor:default;min-height:28px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+.cal-cell.today{background:var(--accent);color:#fff;font-weight:700}
+.cal-cell.my-abs{background:rgba(233,69,96,.15)}
+.cal-dot{width:5px;height:5px;border-radius:50%;background:var(--accent)}
+.cal-cell.other-month{color:var(--muted);opacity:.4}
+/* CHAT */
+.chat-box{border:1px solid var(--border);border-radius:12px;overflow:hidden;display:flex;flex-direction:column;height:340px}
+.chat-msgs{flex:1;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:8px}
+.msg{max-width:80%;padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.4}
+.msg-mine{background:var(--accent);color:#fff;align-self:flex-end;border-bottom-right-radius:3px}
+.msg-other{background:var(--card2);color:var(--text);align-self:flex-start;border-bottom-left-radius:3px}
+.msg-sender{font-size:10px;color:var(--muted);margin-bottom:2px}
+.msg-time{font-size:10px;opacity:.7;margin-top:3px;text-align:right}
+.chat-input-row{display:flex;border-top:1px solid var(--border);padding:8px;gap:6px}
+.chat-input-row input{flex:1;background:var(--card2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 11px;font-size:13px;outline:none}
+.send-btn{background:var(--accent);border:none;color:#fff;border-radius:8px;padding:8px 14px;cursor:pointer;font-size:15px}
+.abs-bar-bg{width:100%;height:5px;background:var(--border);border-radius:3px;margin-top:5px}
+.abs-bar{height:5px;border-radius:3px;transition:.3s}
+/* RATING */
+.rating-row{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;background:var(--card2);border:1px solid var(--border);margin-bottom:6px;cursor:pointer}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">Tk-120 <span>2-ci kurs</span></div>
+  <div class="vbadge">VIEW</div>
+</header>
+<main>
+
+<!-- CEDVEL -->
+<div id="pg-cedvel" class="page active">
+  <div class="stitle">Cədvəl</div>
+  <div class="ssub" id="today-label"></div>
+  <div class="card" style="padding:10px">
+    <div class="cal-header">
+      <button class="cal-nav" onclick="calPrev()">‹</button>
+      <div class="cal-title" id="cal-title"></div>
+      <button class="cal-nav" onclick="calNext()">›</button>
+    </div>
+    <div class="cal-grid" id="cal-grid"></div>
+  </div>
+  <div class="week-tabs">
+    <button class="wtab active" onclick="switchWeek('alt',this)">ALT həftə</button>
+    <button class="wtab" onclick="switchWeek('ust',this)">ÜST həftə</button>
+  </div>
+  <div id="sch-container"></div>
+  <div class="divider"></div>
+  <div class="stitle" style="font-size:16px;margin-bottom:10px">💬 Qrup söhbəti</div>
+  <div style="margin-bottom:8px">
+    <div class="fg" style="margin-bottom:6px"><label>Adınız</label><input type="text" id="chat-name" placeholder="Ad soyadınız..." value=""></div>
+  </div>
+  <div class="chat-box">
+    <div class="chat-msgs" id="chat-msgs"></div>
+    <div class="chat-input-row">
+      <input id="chat-in" placeholder="Mesaj yazın..." onkeydown="if(event.key==='Enter')sendMsg()">
+      <button class="send-btn" onclick="sendMsg()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- MENIM VƏZIYYƏTIM -->
+<div id="pg-men" class="page">
+  <div class="stitle">Mənim vəziyyətim</div>
+  <div class="ssub">Özünü seç və ballarına bax</div>
+  <div class="card">
+    <div class="fg"><label>Sən kimsən?</label>
+      <select id="my-stu" onchange="onMyStuChange()">
+        <option value="">Tələbə seçin...</option>
+      </select>
+    </div>
+    <button class="btn bp" onclick="saveMyStu()">💾 Yadda saxla</button>
+  </div>
+  <div id="my-content"></div>
+</div>
+
+<!-- REYTINQ -->
+<div id="pg-reytinq" class="page">
+  <div class="stitle">Qayıb Reytinqi</div>
+  <div class="ssub">Az qayıb = yüksək reytinq</div>
+  <div id="rating-content"></div>
+</div>
+
+<!-- BU GUN -->
+<div id="pg-bugun" class="page">
+  <div class="stitle">Bu gün qayıb alanlar</div>
+  <div class="ssub" id="bugun-date"></div>
+  <div id="bugun-content"></div>
+</div>
+
+</main>
+<nav class="bottom-nav">
+  <button class="ni active" onclick="showPage('cedvel',this)"><span class="ni-icon">📅</span>Cədvəl</button>
+  <button class="ni" onclick="showPage('men',this)"><span class="ni-icon">👤</span>Mənim</button>
+  <button class="ni" onclick="showPage('reytinq',this)"><span class="ni-icon">🏆</span>Reytinq</button>
+  <button class="ni" onclick="showPage('bugun',this)"><span class="ni-icon">👁️</span>Bu gün</button>
+</nav>
+
+<script>
+const STUDENTS=["Abdullayev Uğur Aqil oğlu","Ağakərimov Baloğlan Seyran oğlu","Babazada Nərmin Ələkbər qızı","Bağırov Xalid Vahid oğlu","Balaqadaşova Mələk Elşad qızı","Cəfərova Nərmin Yaşar qızı","Əhmədov Nahid Habil oğlu","Ələkbərova Leyli Natiq qızı","Əliyev Mehdi Rüfət oğlu","Əliyeva Leyla Rauf qızı","Əlizadə Məryəm Rəşad qızı","Əskərova Zəhra Samir qızı","Fərəcli Hüseyn Mehdiqulu oğlu","Güləliyeva Şəbnəm Mətləb qızı","Həmidi Xədicə Yaşar qızı","Həsənli Nasir Mübariz oğlu","Kərimli Elvin Füzuli oğlu","Məmmədova İlqarə Ramin qızı","Məmmədzadə Əkbər Əli oğlu","Misirli Emil Ramil oğlu","Muradov Zakir Rahib oğlu","Novruzova Ayla Natiqovna","Qayıbova Aysu İsa qızı","Qənbərova Rəşidə Rəşid qızı","Qurbanova Lamiyyə Rəşad qızı","Rəfiyev Rafiq Namiq oğlu","Rzayeva Səlimə Nuru qızı","Xəlilova Ayan Malik qızı","Yusifzadə Hüseyn Aydın oğlu"];
+const SUBJECTS=[{name:"Azərbaycan tarixi",limit:9},{name:"Xətti cəbr",limit:5},{name:"XDIAK-2",limit:5},{name:"Diskret riyaziyyat",limit:7},{name:"Riyazi analiz-2",limit:7},{name:"Proqramlaşdırmanın əsasları-2",limit:7}];
+const AZ_MONTHS=["Yanvar","Fevral","Mart","Aprel","May","İyun","İyul","Avqust","Sentyabr","Oktyabr","Noyabr","Dekabr"];
+const AZ_DAYS=["B.e.","Ç.a.","Çər.","C.a.","Cüm.","Şən.","Baz."];
+const SCHEDULE={
+  alt:[
+    {day:"1-ci gün",lessons:[{name:"Xətti cəbr",type:"muh",teacher:"Eyvazov Elşad",room:"408",time:"08:30–10:05"},{name:"Xətti cəbr",type:"sem",teacher:"Eyvazov Elşad",room:"413",time:"10:15–11:50"},{name:"Azərbaycan tarixi",type:"sem",teacher:"İsmayılova Zəhra",room:"311",time:"12:00–13:35"}]},
+    {day:"2-ci gün",lessons:[{name:"XDIAK-2",type:"sem",teacher:"Quliyeva Dilşad",room:"404",time:"08:30–10:05"},{name:"Proqramlaşdırmanın əsasları-2",type:"muh",teacher:"Hacıyev Rəmzi",room:"317",time:"10:15–11:50"}]},
+    {day:"3-cü gün",lessons:[],rest:true},
+    {day:"4-cü gün",lessons:[{name:"Diskret riyaziyyat",type:"muh",teacher:"Əliyeva Səadət",room:"405",time:"10:15–11:50"},{name:"Diskret riyaziyyat",type:"sem",teacher:"Əliyeva Səadət",room:"315",time:"12:00–13:35"},{name:"Proqramlaşdırmanın əsasları-2",type:"sem",teacher:"Hacıyev Rəmzi / Dadaşzadə Günay",room:"208/409",time:"13:50–15:20"}]},
+    {day:"5-ci gün",lessons:[{name:"Riyazi analiz-2",type:"sem",teacher:"Eyvazov Elşad",room:"411",time:"08:30–10:05"},{name:"Riyazi analiz-2",type:"muh",teacher:"Eyvazov Elşad",room:"400",time:"10:15–11:50"},{name:"Azərbaycan tarixi",type:"sem",teacher:"Məmmədova Sevinc",room:"408",time:"12:00–13:35"}]},
+  ],
+  ust:[
+    {day:"1-ci gün",lessons:[{name:"Xətti cəbr",type:"muh",teacher:"Eyvazov Elşad",room:"408",time:"08:30–10:05"},{name:"Azərbaycan tarixi",type:"muh",teacher:"İsmayılova Zəhra",room:"408",time:"10:15–11:50"},{name:"Azərbaycan tarixi",type:"muh",teacher:"İsmayılova Zəhra",room:"311",time:"12:00–13:35"}]},
+    {day:"2-ci gün",lessons:[{name:"XDIAK-2",type:"sem",teacher:"Quliyeva Dilşad",room:"200",time:"08:30–10:05"},{name:"Proqramlaşdırmanın əsasları-2",type:"muh",teacher:"Hacıyev Rəmzi",room:"317",time:"10:15–11:50"},{name:"XDIAK-2",type:"sem",teacher:"Quliyeva Dilşad",room:"404",time:"08:30–10:05"}]},
+    {day:"3-cü gün",lessons:[],rest:true},
+    {day:"4-cü gün",lessons:[{name:"Diskret riyaziyyat",type:"muh",teacher:"Əliyeva Səadət",room:"405",time:"10:15–11:50"},{name:"Diskret riyaziyyat",type:"sem",teacher:"Əliyeva Səadət",room:"315",time:"12:00–13:35"},{name:"Proqramlaşdırmanın əsasları-2",type:"sem",teacher:"Hacıyev Rəmzi / Dadaşzadə Günay",room:"208/409",time:"13:50–15:20"}]},
+    {day:"5-ci gün",lessons:[{name:"Riyazi analiz-2",type:"sem",teacher:"Eyvazov Elşad",room:"411",time:"08:30–10:05"},{name:"Riyazi analiz-2",type:"muh",teacher:"Eyvazov Elşad",room:"400",time:"10:15–11:50"},{name:"Azərbaycan tarixi",type:"sem",teacher:"Məmmədova Sevinc",room:"408",time:"12:00–13:35"}]},
+  ]
+};
+
+let curWeek='alt', calDate=new Date();
+const calDate2=new Date(); calDate2.setDate(1);
+
+function gd(k,d){try{return JSON.parse(localStorage.getItem(k))||d}catch(e){return d}}
+function sd(k,v){localStorage.setItem(k,JSON.stringify(v))}
+
+function showPage(id,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById('pg-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+  if(id==='men')renderMyContent();
+  if(id==='reytinq')renderRating();
+  if(id==='bugun')renderToday();
+  if(id==='cedvel')renderChat();
+}
+
+// CALENDAR
+function renderCal(){
+  const y=calDate2.getFullYear(), m=calDate2.getMonth();
+  document.getElementById('cal-title').textContent=AZ_MONTHS[m]+' '+y;
+  const myName=gd('my-name','');
+  const abs=gd('absences',{});
+  const myAbsDates=new Set();
+  if(myName&&abs[myName]){Object.values(abs[myName]).forEach(dates=>dates.forEach(d=>myAbsDates.add(d)))}
+  let html=AZ_DAYS.map(d=>`<div class="cal-day-name">${d}</div>`).join('');
+  const first=new Date(y,m,1).getDay();
+  const offset=(first===0?6:first-1);
+  const prev=new Date(y,m,0).getDate();
+  for(let i=0;i<offset;i++){const d=prev-offset+1+i;html+=`<div class="cal-cell other-month">${d}</div>`}
+  const dim=new Date(y,m+1,0).getDate();
+  const today=new Date();
+  for(let d=1;d<=dim;d++){
+    const ds=String(d).padStart(2,'0')+'.'+String(m+1).padStart(2,'0')+'.'+y;
+    const isToday=today.getDate()===d&&today.getMonth()===m&&today.getFullYear()===y;
+    const isMyAbs=myAbsDates.has(ds);
+    html+=`<div class="cal-cell${isToday?' today':isMyAbs?' my-abs':''}">
+      ${d}${isMyAbs&&!isToday?'<div class="cal-dot"></div>':''}
+    </div>`;
+  }
+  const rem=(7-(offset+dim)%7)%7;
+  for(let i=1;i<=rem;i++)html+=`<div class="cal-cell other-month">${i}</div>`;
+  document.getElementById('cal-grid').innerHTML=html;
+  // Today label
+  const t=new Date();
+  document.getElementById('today-label').textContent=
+    String(t.getDate()).padStart(2,'0')+'.'+String(t.getMonth()+1).padStart(2,'0')+'.'+t.getFullYear()+' • Bugün';
+}
+function calPrev(){calDate2.setMonth(calDate2.getMonth()-1);renderCal()}
+function calNext(){calDate2.setMonth(calDate2.getMonth()+1);renderCal()}
+
+// SCHEDULE
+function switchWeek(w,el){curWeek=w;document.querySelectorAll('.wtab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderSch()}
+function renderSch(){
+  const c=document.getElementById('sch-container');
+  c.innerHTML=SCHEDULE[curWeek].map(d=>{
+    if(d.rest)return`<div class="day-block"><div class="dlabel">🌿 ${d.day} — İstirahət</div><div class="csm" style="color:var(--green);text-align:center;padding:14px;font-style:italic">İstirahət günü</div></div>`;
+    return`<div class="day-block"><div class="dlabel">📅 ${d.day}</div>
+    ${d.lessons.map(l=>`<div class="litem ${l.type==='muh'?'tmuh':'tsem'}">
+      <div class="lleft">
+        <div class="lname">${l.name} <span class="badge ${l.type==='muh'?'bblu':'born'}" style="font-size:9px;padding:1px 6px">${l.type==='muh'?'mühazirə':'seminar'}</span></div>
+        <div class="linfo">👨‍🏫 ${l.teacher} &nbsp;|&nbsp; 🚪 ${l.room}</div>
+      </div>
+      <div class="ltime">${l.time}</div>
+    </div>`).join('')}</div>`;
+  }).join('');
+}
+
+// CHAT
+function renderChat(){
+  const msgs=gd('chat',[]);
+  const myName=document.getElementById('chat-name').value.trim()||gd('chat-myname','');
+  const c=document.getElementById('chat-msgs');
+  if(!msgs.length){c.innerHTML='<div style="color:var(--muted);text-align:center;padding:20px;font-size:13px">Hələ mesaj yoxdur...</div>';return}
+  c.innerHTML=msgs.map(m=>{
+    const mine=m.sender===myName||m.sender==='Admin'&&!myName;
+    return`<div class="msg ${m.sender===myName?'msg-mine':'msg-other'}">
+      ${m.sender!==myName?`<div class="msg-sender">${m.sender}</div>`:''}
+      ${m.text}
+      <div class="msg-time">${m.time}</div>
+    </div>`;
+  }).join('');
+  c.scrollTop=c.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('chat-in');
+  const nameInp=document.getElementById('chat-name');
+  const txt=inp.value.trim();if(!txt)return;
+  let name=nameInp.value.trim();
+  if(!name){name=gd('chat-myname','');if(!name){alert('Əvvəlcə adınızı yazın!');nameInp.focus();return}}
+  sd('chat-myname',name);
+  let msgs=gd('chat',[]);
+  const now=new Date();
+  msgs.push({sender:name,text:txt,time:String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')});
+  sd('chat',msgs);inp.value='';renderChat();
+}
+
+// MY CONTENT
+function onMyStuChange(){const v=document.getElementById('my-stu').value;if(v){sd('my-name',v);renderMyContent()}}
+function saveMyStu(){const v=document.getElementById('my-stu').value;if(!v)return;sd('my-name',v);renderMyContent();renderCal();}
+
+function calcDav(absCount,limit){
+  if(absCount===0)return 10;
+  const half=Math.ceil(limit/2);
+  if(absCount<half)return 10;
+  if(absCount===half)return 9;
+  if(absCount===limit)return 8;
+  if(absCount>limit)return Math.max(0,8-(absCount-limit));
+  return Math.max(8,9-Math.floor((absCount-half)/(limit-half)));
+}
+function calcGiris(data,absCount,limit){
+  const dav=calcDav(absCount,limit);
+  const k=parseFloat((((data.k1||0)+(data.k2||0)+(data.k3||0))/3*2).toFixed(2));
+  const si=data.si||0;
+  const aktList=data.aktList||[];
+  const akt=aktList.length?parseFloat((aktList.reduce((a,b)=>a+b,0)/aktList.length).toFixed(2)):0;
+  return Math.min(50,parseFloat((si+dav+k+akt).toFixed(1)));
+}
+function calcTotal(data,absCount,limit){
+  const giris=calcGiris(data,absCount,limit);
+  const imtahan=data.imtahan||0;
+  return{giris,imtahan,total:Math.min(100,parseFloat((giris+imtahan).toFixed(1))),dav:calcDav(absCount,limit)};
+}
+
+function renderMyContent(){
+  const name=gd('my-name','');
+  if(name)document.getElementById('my-stu').value=name;
+  const c=document.getElementById('my-content');
+  if(!name){c.innerHTML='<div class="card" style="color:var(--muted);text-align:center;padding:20px">Tələbə seçin</div>';return}
+  const abs=gd('absences',{});
+  // BAL SECTION
+  let html=`<div class="stitle" style="font-size:15px;margin-bottom:10px">🎯 Ballarım</div>`;
+  SUBJECTS.forEach(subj=>{
+    const key='bal:'+name+':'+subj.name;
+    const data=gd(key,null);
+    const absC=(abs[name]?.[subj.name]||[]).length;
+    if(data){
+      const penalty=absC>=subj.limit?2:(absC>=Math.ceil(subj.limit/2)?1:0);
+      const dav=calcDav(absC,subj.limit);
+      const kVal=parseFloat((((data.k1||0)+(data.k2||0)+(data.k3||0))/3*2).toFixed(1));
+      const aktList=data.aktList||[];
+      const aktAvg=aktList.length?parseFloat((aktList.reduce((a,b)=>a+b,0)/aktList.length).toFixed(1)):0;
+      const {giris,imtahan,total}=calcTotal(data,absC,subj.limit);
+      const pct=Math.round(total/100*100);
+      const color=total>=85?'var(--green)':total>=60?'var(--orange)':'var(--accent)';
+      const r=52; const circ=2*Math.PI*r;
+      html+=`<div class="card">
+        <div style="font-size:14px;font-weight:700;margin-bottom:12px;color:var(--accent)">${subj.name}</div>
+        <div class="bal-ring-wrap">
+          <div class="bal-ring">
+            <svg width="120" height="120" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--border)" stroke-width="10"/>
+              <circle cx="60" cy="60" r="${r}" fill="none" stroke="${color}" stroke-width="10"
+                stroke-dasharray="${circ}" stroke-dashoffset="${circ*(1-pct/100)}" stroke-linecap="round"/>
+            </svg>
+            <div class="bal-ring-txt">
+              <div class="bal-ring-num" style="color:${color}">${total}</div>
+              <div class="bal-ring-lbl">/ 100</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="bal-row"><span class="bal-row-lbl">📄 Sərbəst iş</span><span class="bal-row-val" style="color:var(--blue)">${data.si||0} <span style="font-size:11px;color:var(--muted)">/ 10</span></span></div>
+          <div class="bal-row"><span class="bal-row-lbl">📅 Davamiyyət</span><span class="bal-row-val" style="color:${dav<10?'var(--orange)':'var(--green)'}">${dav} <span style="font-size:11px;color:var(--muted)">/ 10</span></span></div>
+          <div class="bal-row"><span class="bal-row-lbl">📝 Kollekviumlar</span><span class="bal-row-val" style="color:var(--purple)">${kVal} <span style="font-size:11px;color:var(--muted)">/ 20 &nbsp;((${data.k1||0}+${data.k2||0}+${data.k3||0})/3)×2</span></span></div>
+          <div class="bal-row"><span class="bal-row-lbl">⚡ Aktivlik</span><span class="bal-row-val" style="color:var(--orange)">${aktAvg} <span style="font-size:11px;color:var(--muted)">/ 10 (ortalama)</span></span></div>
+          <div class="bal-row" style="border-top:1.5px solid var(--border);padding-top:10px;margin-top:4px">
+            <span class="bal-row-lbl" style="font-weight:700;color:var(--text)">🎯 Giriş balı</span>
+            <span class="bal-row-val" style="color:var(--blue);font-size:20px">${giris} <span style="font-size:11px;color:var(--muted)">/ 50</span></span>
+          </div>
+          <div class="bal-row">
+            <span class="bal-row-lbl" style="font-weight:700;color:var(--text)">🎓 Semestr imtahan</span>
+            <span class="bal-row-val" style="color:var(--green);font-size:20px">${imtahan} <span style="font-size:11px;color:var(--muted)">/ 50</span></span>
+          </div>
+          <div class="bal-row" style="background:rgba(233,69,96,.08);border-radius:8px;padding:10px;margin-top:6px;border:1px solid var(--accent)">
+            <span class="bal-row-lbl" style="font-weight:700;font-size:14px;color:var(--text)">📊 Ümumi bal</span>
+            <span class="bal-row-val" style="color:${color};font-size:24px">${total} <span style="font-size:12px;color:var(--muted)">/ 100</span></span>
+          </div>
+        </div>
+      </div>`;
+    } else {
+      html+=`<div class="csm" style="margin-bottom:7px">
+        <div style="font-size:13px;font-weight:600;color:var(--muted)">${subj.name}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">Bal daxil edilməyib <span class="badge born">${absC} qayıb</span></div>
+      </div>`;
+    }
+  });
+  // QAYIB SECTION
+  html+=`<div class="divider"></div><div class="stitle" style="font-size:15px;margin-bottom:10px">📋 Qayıblarım</div>`;
+  const sAbs=abs[name]||{};
+  if(!Object.keys(sAbs).length){html+='<div class="csm" style="color:var(--green);text-align:center;padding:14px">🎉 Qayıb yoxdur!</div>'}
+  else{
+    html+=SUBJECTS.map(subj=>{
+      const count=(sAbs[subj.name]||[]).length;
+      const pct=Math.min(100,Math.round(count/subj.limit*100));
+      const color=pct>=100?'var(--accent)':pct>=70?'var(--orange)':'var(--green)';
+      return`<div class="csm" style="margin-bottom:7px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font-size:12px;flex:1;font-weight:600">${subj.name}</span>
+          <span style="font-size:18px;font-weight:700;color:${color}">${count}</span>
+          <span style="font-size:10px;color:var(--muted)">/ ${subj.limit}</span>
+        </div>
+        <div class="abs-bar-bg"><div class="abs-bar" style="width:${pct}%;background:${color}"></div></div>
+        ${(sAbs[subj.name]||[]).map(d=>`<span class="tag">${d}</span>`).join('')}
+      </div>`;
+    }).join('');
+  }
+  c.innerHTML=html;
+}
+
+function renderRating(){
+  const abs=gd('absences',{});
+  const c=document.getElementById('rating-content');
+  const data=STUDENTS.map((s,i)=>{
+    const total=abs[s]?Object.values(abs[s]).reduce((a,b)=>a+b.length,0):0;
+    return{name:s,i:i+1,total};
+  }).sort((a,b)=>a.total-b.total);
+  c.innerHTML=data.map((s,rank)=>{
+    const medal=rank===0?'🥇':rank===1?'🥈':rank===2?'🥉':'';
+    return`<div class="rating-row">
+      <div style="font-size:22px;min-width:32px;text-align:center">${medal||(rank+1)+'.'}</div>
+      <div style="flex:1;font-size:13px">${s.name}</div>
+      <span class="badge ${s.total===0?'bgrn':s.total<3?'born':'bred'}">${s.total} qayıb</span>
+    </div>`;
+  }).join('');
+}
+
+function renderToday(){
+  const t=new Date();
+  const ds=String(t.getDate()).padStart(2,'0')+'.'+String(t.getMonth()+1).padStart(2,'0')+'.'+t.getFullYear();
+  document.getElementById('bugun-date').textContent=ds;
+  const abs=gd('absences',{});
+  let found=[];
+  STUDENTS.forEach(s=>{
+    const subjs=Object.entries(abs[s]||{}).filter(([,d])=>d.includes(ds)).map(([subj])=>subj);
+    if(subjs.length)found.push({name:s,subjs});
+  });
+  const c=document.getElementById('bugun-content');
+  if(!found.length){c.innerHTML='<div class="csm" style="color:var(--green);text-align:center;padding:18px">Bu gün heç kim qayıb almayıb 🎉</div>';return}
+  c.innerHTML=found.map(f=>`<div class="csm" style="margin-bottom:7px">
+    <div style="font-weight:600;font-size:13px;margin-bottom:5px">${f.name}</div>
+    ${f.subjs.map(s=>`<span class="badge bred" style="margin-right:4px">${s}</span>`).join('')}
+  </div>`).join('');
+}
+
+function init(){
+  const sel=document.getElementById('my-stu');
+  STUDENTS.forEach(s=>{const o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o)});
+  const saved=gd('my-name','');
+  if(saved){sel.value=saved;renderMyContent()}
+  const savedName=gd('chat-myname','');
+  if(savedName)document.getElementById('chat-name').value=savedName;
+  document.getElementById('chat-name').addEventListener('change',function(){sd('chat-myname',this.value.trim())});
+  renderCal();renderSch();renderChat();
+}
+init();
+</script>
+</body>
+</html>
